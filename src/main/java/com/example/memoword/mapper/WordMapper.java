@@ -5,7 +5,7 @@ import com.example.memoword.dto.response.WordResponse;
 import com.example.memoword.entity.Word;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface WordMapper {
 
     Word toEntity(WordRequest request);
