@@ -15,3 +15,8 @@ spring:
 jwt:
   secret: secret
   expiration: 86400000
+
+logging:
+  level:
+    root: debug
+

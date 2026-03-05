@@ -23,6 +23,6 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "users")
-    private List<Word> words = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserWord> words = new ArrayList<>();
 }

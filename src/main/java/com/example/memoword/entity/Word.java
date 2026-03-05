@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "words")
 public class Word {
 
     @Id
@@ -19,5 +20,5 @@ public class Word {
     private String translation;
 
     @OneToMany(mappedBy = "word")
-    private List<User> users = new ArrayList<>();
+    private List<UserWord> users = new ArrayList<>();
 }

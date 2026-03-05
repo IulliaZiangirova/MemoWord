@@ -11,11 +11,13 @@ import com.example.memoword.repository.UserRepository;
 import com.example.memoword.service.AuthService;
 import com.example.memoword.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -24,7 +26,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void register(RegisterRequest registerRequest) {
+        log.info("Registering user with email: {}", registerRequest.email());
         if(userRepository.findByEmail(registerRequest.email()).isPresent()) {
+            log.info("User registration failed for email: {}", registerRequest.email());
             throw new UserAlreadyExistsException("User with email " + registerRequest.email() + " already exists");
         }
         User user = User.builder()
@@ -35,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         userRepository.save(user);
+        log.info("User registered successfully for email: {}", registerRequest.email());
     }
 
     @Override
