@@ -3,6 +3,7 @@ package com.example.memoword.service.impl;
 import com.example.memoword.dto.request.WordRequest;
 import com.example.memoword.dto.response.WordResponse;
 import com.example.memoword.entity.Word;
+import com.example.memoword.exception.WordAlreadyExistsException;
 import com.example.memoword.mapper.WordMapper;
 import com.example.memoword.repository.WordRepository;
 import com.example.memoword.service.WordService;
@@ -20,8 +21,18 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public void addWord(WordRequest request) {
-        Word word = wordMapper.toEntity(request);
-        wordRepository.save(word);
+        boolean wordAlreadyExists = false;
+        List<Word> wordsByOriginalWord = wordRepository.findWordsByOriginalWord(request.getOriginalWord());
+        if(!wordsByOriginalWord.isEmpty()) {
+            wordAlreadyExists = wordsByOriginalWord.stream()
+                    .anyMatch(word -> word.getTranslation().equals(request.getTranslation()));
+        }
+        if(!wordAlreadyExists) {
+            Word word = wordMapper.toEntity(request);
+            wordRepository.save(word);
+        } else {
+            throw new WordAlreadyExistsException("Word with original word '" + request.getOriginalWord() + "' and translation '" + request.getTranslation() + "' already exists.");
+        }
     }
 
     @Override
