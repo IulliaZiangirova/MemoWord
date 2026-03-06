@@ -1,8 +1,7 @@
 package com.example.memoword.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +9,9 @@ import java.time.LocalDateTime;
 @Table(name = "user_word")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserWord {
 
     @Id
@@ -22,8 +24,8 @@ public class UserWord {
     @JoinColumn(name = "word_id")
     private Word word;
 
-    private boolean learned = false;
-    private int repetitionCount = 0;
+    private boolean learned;
+    private int repetitionCount;
     private LocalDateTime addedAt;
 
 }

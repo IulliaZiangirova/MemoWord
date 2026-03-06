@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,7 @@ public class WordServiceImpl implements WordService {
         }
     }
 
+    @Transactional
     @Override
     public void addWordForCurrentUser(WordRequest request) {
         Optional<Word> existing = wordRepository
@@ -54,12 +57,16 @@ public class WordServiceImpl implements WordService {
         User user = userRepository.findById(currentUser.getId()).orElseThrow();
 
         if (!userWordRepository.existsByUserAndWord(user, newWord)) {
-            UserWord userWord = new UserWord();
-            userWord.setUser(user);
-            userWord.setWord(newWord);
+            UserWord userWord = UserWord.builder()
+                    .user(user)
+                    .word(newWord)
+                    .learned(false)
+                    .repetitionCount(0)
+                    .addedAt(LocalDateTime.now())
+                    .build();
             userWordRepository.save(userWord);
         } else {
-            throw new WordAlreadyExistsException("Word with original word '" + request.getOriginalWord() + "' and translation '" + request.getTranslation() + "' already exists.");
+            throw new WordAlreadyExistsException("Word with original word '" + request.getOriginalWord() + "' and translation '" + request.getTranslation() + "' already added for user.");
         }
     }
 
