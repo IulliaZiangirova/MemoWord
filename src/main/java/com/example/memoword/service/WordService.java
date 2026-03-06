@@ -10,5 +10,6 @@ public interface WordService {
     Word addWord(WordRequest request);
     void addWordForCurrentUser(WordRequest request);
     List<WordResponse> getAllWords();
+    List<WordResponse> getAllWordsForCurrentUser();
 
 }

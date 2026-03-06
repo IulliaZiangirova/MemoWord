@@ -53,9 +53,7 @@ public class WordServiceImpl implements WordService {
             Word word = wordMapper.toEntity(request);
             return wordRepository.save(word);
         });
-        CustomerUserDetails currentUser = getCurrentUser();
-        User user = userRepository.findById(currentUser.getId()).orElseThrow();
-
+        User user = getCurrentUser();
         if (!userWordRepository.existsByUserAndWord(user, newWord)) {
             UserWord userWord = UserWord.builder()
                     .user(user)
@@ -70,7 +68,6 @@ public class WordServiceImpl implements WordService {
         }
     }
 
-
     @Override
     public List<WordResponse> getAllWords() {
         return wordRepository.findAll().stream()
@@ -78,9 +75,19 @@ public class WordServiceImpl implements WordService {
                 .toList();
     }
 
-    private CustomerUserDetails getCurrentUser() {
-        return (CustomerUserDetails) SecurityContextHolder.getContext()
+    @Override
+    public List<WordResponse> getAllWordsForCurrentUser() {
+        User user = getCurrentUser();
+        List<UserWord> userWords = userWordRepository.findAllByUser(user);
+        return userWords.stream()
+                .map(userWord -> wordMapper.toResponse(userWord.getWord()))
+                .toList();
+    }
+
+    private User getCurrentUser() {
+        CustomerUserDetails currentUser = (CustomerUserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
+        return userRepository.findById(currentUser.getId()).orElseThrow();
     }
 }
