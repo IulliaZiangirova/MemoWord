@@ -20,6 +20,11 @@ public class WordController {
         wordService.addWord(request);
     }
 
+    @PostMapping("/user-words")
+    public void addWordForCurrentUser(@RequestBody WordRequest request) {
+        wordService.addWordForCurrentUser(request);
+    }
+
     @GetMapping
     List<WordResponse> getAllWords() {
         return wordService.getAllWords();

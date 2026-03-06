@@ -13,7 +13,7 @@ spring:
     enabled: true
 
 jwt:
-  secret: secret
+  secret: "my-super-secret-key-that-is-at-least-32-bytes-long"
   expiration: 86400000
 
 #logging:

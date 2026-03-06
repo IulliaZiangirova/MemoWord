@@ -1,6 +1,7 @@
 package com.example.memoword.dto;
 
 import com.example.memoword.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,9 +12,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
+@Builder
 public class CustomerUserDetails implements UserDetails {
 
-    private final User user;
+    private final Long id;
+    private final String username;
+    private final String password;
 
 
     @Override
@@ -23,12 +27,12 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return username;
     }
 
     @Override
