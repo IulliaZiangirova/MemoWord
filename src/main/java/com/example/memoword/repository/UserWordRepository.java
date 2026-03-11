@@ -11,4 +11,5 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long> {
 
     boolean existsByUserAndWord(User user, Word word);
     List<UserWord> findAllByUser(User user);
+    List<UserWord> findAllByUserAndLearned(User user, boolean learned);
 }

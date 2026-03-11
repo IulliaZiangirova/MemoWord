@@ -1,6 +1,5 @@
 package com.example.memoword.dto;
 
-import com.example.memoword.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
